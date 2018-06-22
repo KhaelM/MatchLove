@@ -13,7 +13,10 @@
     <!-- Material Design Bootstrap -->
     <link href="css/mdb.min.css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -204,6 +207,14 @@
   <script type="text/javascript">
     // Animations initialization
     new WOW().init();
+
+    $(function() {
+      $('input').focus(function() {
+        $("#carousel-example-1z").carousel('pause');
+      }).blur(function() {
+        $("#carousel-example-1z").carousel('cycle');
+      });
+    }); 
   </script>
 </body>
 
