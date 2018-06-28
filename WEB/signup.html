@@ -7,7 +7,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Inscription</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
@@ -21,63 +21,52 @@
     </style>
 </head>
 <body>
-  <!-- Container -->
-  <div class="container">
-
-    <!-- Form -->
-    <form class="modal-dialog cascading-modal" role="document">
-
-      <!-- Content -->
-      <div class="modal-content">
-
-        <!-- Header -->
-        <div class="modal-header primary-color white-text">
-          <h4 class="title">
-            <i class="fa fa-pencil"></i>Inscription
-          </h4>
-        </div>
-        <!-- Body -->
-        <div class="modal-body">
-
-          <!-- Last name -->
-          <div class="md-form form-sm">
-            <i class="fa fa-user prefix"></i>
-            <input type="text" id="lastName" class="form-control form-control-sm">
-            <label for="lastName">Nom</label>
-          </div>
-          <!-- Last name -->
-          <!-- First name -->
-          <div class="md-form form-sm">
-            <i class="fa fa-user prefix"></i>
-            <input type="text" id="firstName" class="form-control form-control-sm">
-            <label for="lastName">Prénom</label>
-          </div>
-          <!-- First name -->
-          <!-- Sex choice -->
-          <div class="btn-group" data-toggle="buttons">
-
-            <label for="male"  class="btn btn-default btn-rounded active form-check-label">
-              <i class="fa fa-male"></i>
-              <input name="gender" value="male" id="male" class="form-check-input" type="radio" checked autocomplete="off"> Homme
-            </label>
-            <label for="female" class="btn btn-default form-check-label">
-              <i class="fa fa-female"></i>
-              <input name="gender" value="female" id="female" class="form-check-input" type="radio" autocomplete="off"> Femme
-            </label>
-
-          </div>
-
-        </div>
-
+    <!-- Conteneur Principal -->
+    <div id="conteneurPrincipal">
+      <div id="inscriptionTitre">
+        <div>Inscription</div>
       </div>
-      <!-- Content -->
       
+      <button onclick="suivantPrecedent(-1)" id="btnPrecedent" class="fa fa-chevron-left"></button>
+      <!-- Formulaire -->
+      <form action="" method="">
+        <div class="tab">
+          <input id="nom" name="nom" type="text" required>
+          <label for="nom"><span>Nom</span></label>
+          <input id="prenom" name="prenom" type="text" required>
+          <label for="prenom"><span>Prénom</span></label>
+        </div>
+        <div class="tab">
+          <input id="pseudo" name="pseudo" type="text" required>
+          <label for="pseudo"><span>Pseudo</span></label>
+          <select name="jour" id="jour">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+          <label for="jour"><span>Jour</span></label>
+        </div>
+        <div class="tab">
+          <input id="test" name="test" type="text" required>
+          <label for="test"><span>Test</span></label>
+          <input id="confirm" name="confirm" type="password" required>
+          <label for="confirm"><span>Mot de passe</span></label>
+        </div>
+      </form>
+      <!-- /Formulaire -->
+      <button onclick="suivantPrecedent(1)" id="btnSuivant" class="fa fa-chevron-right"></button>
 
-    </form>
-    <!-- Form -->
+      <!-- Cercles pour indiquer la position dans le formulaire -->
+      <div id="regroupementBoutonEtape">
+          <span class="etape"></span>
+          <span class="etape"></span>
+          <span class="etape"></span>
+      </div>
 
-  </div>
-  <!-- Container -->
+    </div>
+    <!-- /Conteneur Principal -->
+
 
 
 
