@@ -22,43 +22,67 @@
 </head>
 <body>
     <!-- Conteneur Principal -->
-    <div id="conteneurPrincipal">
-      <div id="inscriptionTitre">
+    <div id="conteneurPrincipal" class="animated fadeInRight">
+      <div id="inscriptionTitre" class="animated infinite pulse">
         <div>Inscription</div>
       </div>
       
       <button onclick="suivantPrecedent(-1)" id="btnPrecedent" class="fa fa-chevron-left"></button>
       <!-- Formulaire -->
       <form action="" method="">
-        <div class="tab">
-          <input id="nom" name="nom" type="text" required>
-          <label for="nom"><span>Nom</span></label>
-          <input id="prenom" name="prenom" type="text" required>
-          <label for="prenom"><span>Prénom</span></label>
+        <div class="tab animated fadeInLeft">
+          <input class="avecMargin" id="nom" name="nom" type="text" required>
+          <label class="avecEffet" for="nom"><span>Nom</span></label>
+          <input class="avecMargin" id="prenom" name="prenom" type="text" required>
+          <label class="avecEffet" for="prenom"><span>Prénom</span></label>
         </div>
-        <div class="tab">
-          <input id="pseudo" name="pseudo" type="text" required>
-          <label for="pseudo"><span>Pseudo</span></label>
+        <div class="tab animated fadeInUp">
+          <h5>Sexe</h5>
+          <label class="labelRadio" class="form-check-label" for="homme">Homme</label>
+          <input name="sexe" id="homme" type="radio">
+          <label class="labelRadio" class="form-check-label" for="femme">Femme</label>
+          <input name="sexe" id="femme" type="radio">
+          <hr>
+          <h5>Date de naissance</h5>
           <select name="jour" id="jour">
-            <option value="1">1</option>
+            <option id="bis" value="">Jour</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
           </select>
-          <label for="jour"><span>Jour</span></label>
+          <select name="mois" id="mois">
+              <option id="bis" value="">Mois</option>
+              <option value="2">Janvier</option>
+              <option value="3">Février</option>
+              <option value="4">Mars</option>
+          </select>
+          <select name="annee" id="annee">
+              <option id="bis" value="">Annee</option>
+              <option value="2">2017</option>
+              <option value="3">1999</option>
+              <option value="4">1998</option>
+          </select>
+          
         </div>
-        <div class="tab">
-          <input id="test" name="test" type="text" required>
-          <label for="test"><span>Test</span></label>
-          <input id="confirm" name="confirm" type="password" required>
-          <label for="confirm"><span>Mot de passe</span></label>
+        <div class="tab animated fadeInRight">
+          <input class="avecMargin" id="pseudo" name="pseudo" type="text" required>
+          <label class="avecEffet" for="pseudo"><span>Pseudo</span></label>
+          <input class="avecMargin" id="mail" name="mail" type="email" required>
+          <label class="avecEffet" for="mail"><span>Mail</span></label>
         </div>
+
+        <div class="tab animated fadeInUp">
+          <input id="choixFichier" type="file">
+          <button id="valider" type="submit" >Valider</button>
+        </div>
+
       </form>
       <!-- /Formulaire -->
       <button onclick="suivantPrecedent(1)" id="btnSuivant" class="fa fa-chevron-right"></button>
 
       <!-- Cercles pour indiquer la position dans le formulaire -->
       <div id="regroupementBoutonEtape">
+          <span class="etape"></span>
           <span class="etape"></span>
           <span class="etape"></span>
           <span class="etape"></span>
