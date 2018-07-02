@@ -1,3 +1,32 @@
+<?php
+  require("function/function.php");
+  
+  $error = "";
+  $value = "";
+  if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if($_POST['login'] == null) {
+      $error.="<p class='error'>Veuillez renseigner votre pseudo !</p>";
+    }
+    if($_POST['password'] == null) {
+        $error.="<p class='error'>Mot de passe obligatoire !</p>";
+    }
+    if($error === "") {
+        if(verifierLogin($_POST['login'],$_POST['password']) == 0) {
+            $error = "<p class='error'>Mot de passe incorrect !</p>";
+            $value = $_POST['login'];
+        } else if(verifierLogin($_POST['login'],$_POST['password']) === -1) {
+            $error = "<p class='error'>Cette pseudo n'est pas encore inscrite !</p>";
+        } else {
+            session_start();                
+            $userInfo = getMembre($_POST['login']);
+            $_SESSION['pseudo'] = $_POST['login'];
+            $_SESSION['nom'] = $userInfo['Nom'];
+            $_SESSION['email'] = $userInfo['Email'];
+            header("Location:accueil.php");
+        }
+    }
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +46,11 @@
     <!-- Favicon icon -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+      .error {
+        color: red;
+      }
+    </style>
 </head>
 
 <body>
@@ -99,7 +133,7 @@
                         <hr class="hr-light">
                       </div>
                       <!--Body-->
-                      <form action="">
+                      <form action="index.php" method="POST">
                         <div class="md-form">
                           <i class="fa fa-user prefix white-text active"></i>
                           <input type="text" id="login" name="login" class="white-text form-control" required>
@@ -107,10 +141,11 @@
                         </div>
                         <div class="md-form">
                           <i class="fa fa-lock prefix white-text active"></i>
-                          <input type="password" id="mpLogin" class="white-text form-control" required>
+                          <input type="password" id="mpLogin" name="password" class="white-text form-control" required>
                           <label for="mpLogin" class="white-text">Mot de passe</label>
                         </div>
                         <div class="text-center mt-4">
+                          <?php echo $error; ?>
                           <button class="btn btn-indigo">Se connecter</button>
                           <hr class="hr-light mb-3 mt-4">
                           <div class="inline-ul text-center d-flex justify-content-center">
