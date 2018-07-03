@@ -61,13 +61,11 @@
         mysqli_free_result($request);
     }
 
-    function inscrire($nom,$prenom,$pseudo,$day,$month,$year,$photoProfil,$sexe,$email,$mdp) {  
-        $sql = "SELECT STR_TO_DATE('%s%s%s%s%s','%s%s%s')";
-        $sql = sprintf($sql,$day,'/',$month,'/',$year,'%d', '/%m', '/%Y');
-        $sql1 = "INSERT INTO Membre VALUES(NULL,'%s','%s','%s','%s','%s','%s','%s',SHA1('%s'),'SELECT NOW()')";
-        $sql1 = sprintf($sql1,$nom,$prenom,$pseudo,$sql,$photoProfil,$sexe,$email,$mdp);
-        $request = mysqli_query(dbconnect(),$sql);
-        mysqli_free_result($request);
+    function inscrire($nom,$prenom,$pseudo,$dateNaissance,$sexe,$email,$mdp) {
+        $dateInscription = mysqli_fetch_assoc(mysqli_query(dbconnect(),"SELECT NOW() as date"));
+        $sql = "INSERT INTO Membre VALUES(NULL,'%s','%s','%s','%s',NULL,'%s','%s',SHA1('%s'),'%s',0)";
+        $sql = sprintf($sql,$nom,$prenom,$pseudo,$dateNaissance,$sexe,$email,$mdp,$dateInscription['date']);
+        mysqli_query(dbconnect(),$sql);
     }
 
     function verifierLogin($pseudo, $password) { // test login
@@ -98,6 +96,79 @@
         $sql = "UPDATE Membre SET NbreVue=NbreVue+1 WHERE IdMembre=%s";
         $sql = sprintf($sql,$idMembre);
         mysqli_query(dbconnect(),$sql);
+    }
+
+    function verifierDoublon($attribut,$test) {
+        $sql = "SELECT * FROM Membre WHERE %s = '%s'";
+        $sql = sprintf($sql,$attribut,$test);
+        $request = mysqli_query(dbconnect(),$sql);
+        return mysqli_num_rows($request);
+    }
+
+    function checkInputSignUp($nom,$prenom,$pseudo,$dateNaissance,$sexe,$email,$pwd,$confirmPwd) {
+        $result = array('nom'=>'','prenom'=>'','pseudo'=>'','email'=>'','pwd'=>'','dateNaissance'=>'','error'=>'');
+        if($nom == null) {
+            $result['error'].="<p class='error'>nom requis</p>";
+        } else {
+            $result['nom'] = $nom;
+        }
+
+        if($prenom == null) {
+            $result['error'].="<p class='error'>prenom requis</p>";
+        } else {
+            $result['prenom'] = $prenom;
+        }
+
+        if($pseudo == null) {
+            $result['error'].="<p class='error'>pseudo requis</p>";
+        } else if(verifierDoublon("Pseudo",$pseudo)) {
+            $result['error'].="<p class='error'>Pseudo déjà utilisé</p>";       
+        } else {
+            $result['pseudo'] = $pseudo;
+        }
+        
+        if($email == null) {
+            $result['error'].="<p class='error'>Email requis</p>";
+        } else if(verifierDoublon("Email",$email) != 0) {
+            $result['error'].="<p class='error'>Email déjà utilisé</p>";            
+        }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $result['error'].="<p class='error'>".$email." n'est pas une adresse valide</p>";
+        } else {
+            $result['email'] = $email;
+        }
+
+        if($pwd == null) {
+            $result['error'].="<p class='error'>Mot de passe requis</p>";
+        }else if($confirmPwd == null) {
+            $result['error'].="<p class='error'>Confirmation du mot de passe requis</p>";
+            $result['pwd'] = $pwd; 
+        } else if(strcmp($pwd,$confirmPwd) != 0) {
+            $result['error'].="<p class='error'>Les mots de passe ne correspondent pas</p>";
+        }
+
+        if($dateNaissance == null) {
+            $result['error'].="<p class='error'>Verifier votre date de naissance</p>";
+        } else {
+            $result['dateNaissance'] = $dateNaissance;
+        }
+        return $result;
+    }
+
+    function checkInputLogin($login,$pwd) { 
+        $result = array('error' => '','login'=>'');
+        if($login == null) {
+            $result['error'].="<p class='error'>Veuillez renseigner votre pseudo !</p>";
+        }
+        if($pwd == null) {
+            $result['error'].="<p class='error'>Mot de passe obligatoire !</p>";
+        }
+        if(verifierLogin($login,$pwd) === 0) {
+            $result['error'].= "<p class='error'>Mot de passe incorrect !</p>";
+            $result['login'] = $login;
+        } else if(verifierLogin($login,$pwd) === -1) {
+            $result['error'].= "<p class='error'>Cette pseudo n'est pas encore inscrite !</p>";
+        }
+        return $result;
     }
 
 ?>

@@ -1,31 +1,27 @@
 <?php
   require("function/function.php");
   
-  $error = "";
-  $value = "";
+  $signupResult = array('nom'=>'','prenom'=>'','pseudo'=>'','email'=>'','pwd'=>'','dateNaissance'=>'','error'=>'');
+  $loginResult = array('error' => '','login'=>'');
   if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if($_POST['login'] == null) {
-      $error.="<p class='error'>Veuillez renseigner votre pseudo !</p>";
-    }
-    if($_POST['password'] == null) {
-        $error.="<p class='error'>Mot de passe obligatoire !</p>";
-    }
-    if($error === "") {
-        if(verifierLogin($_POST['login'],$_POST['password']) == 0) {
-            $error = "<p class='error'>Mot de passe incorrect !</p>";
-            $value = $_POST['login'];
-        } else if(verifierLogin($_POST['login'],$_POST['password']) === -1) {
-            $error = "<p class='error'>Cette pseudo n'est pas encore inscrite !</p>";
-        } else {
-            session_start();                
-            $userInfo = getMembre($_POST['login']);
-            $_SESSION['pseudo'] = $_POST['login'];
-            $_SESSION['nom'] = $userInfo['Nom'];
-            $_SESSION['email'] = $userInfo['Email'];
-            header("Location:accueil.php");
-        }
+    if(isset($_POST['nom'])) { // inscription
+      $signupResult = checkInputSignUp($_POST['nom'],$_POST['prenom'],$_POST['pseudo'],$_POST['date-naissance'],$_POST['sexe'],$_POST['email'],$_POST['mpsignup'],$_POST['confirmMpSignup']);
+      if($signupResult['error'] == "") {
+        inscrire($_POST['nom'],$_POST['prenom'],$_POST['pseudo'],$_POST['date-naissance'],$_POST['sexe'],$_POST['email'],$_POST['mpsignup']);
+        session_start();
+        $_SESSION['pseudo'] = $_POST['pseudo'];
+        header("Location:accueil.php");
+      }
+    } else { // connexion
+      $loginResult = checkInputLogin($_POST['login'],$_POST['password']);
+      if($loginResult['error'] == "") {
+        session_start();
+        $_SESSION['pseudo'] = $_POST['login'];
+        header("Location:accueil.php");
+      }
     }
   }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +32,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Bienvenue sur Match Love</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
@@ -136,7 +132,7 @@
                       <form action="index.php" method="POST">
                         <div class="md-form">
                           <i class="fa fa-user prefix white-text active"></i>
-                          <input type="text" id="login" name="login" class="white-text form-control" required>
+                          <input type="text" id="login" name="login" class="white-text form-control" value="<?php echo $loginResult['login']; ?>" required>
                           <label for="login" class="white-text">Pseudo</label>
                         </div>
                         <div class="md-form">
@@ -145,7 +141,7 @@
                           <label for="mpLogin" class="white-text">Mot de passe</label>
                         </div>
                         <div class="text-center mt-4">
-                          <?php echo $error; ?>
+                          <?php echo $loginResult['error']; ?>
                           <button class="btn btn-indigo">Se connecter</button>
                           <hr class="hr-light mb-3 mt-4">
                           <div class="inline-ul text-center d-flex justify-content-center">
@@ -186,11 +182,11 @@
             <!-- Content -->
             <div class="container">
               <!--Grid row-->
-              <div class="row mt-5 ml-4">
+              <div class="row ml-4">
                 <!--Grid column-->
                 <div class="col-md-6 col-xl-5 mb-4">
                   <!--Form-->
-                  <div class="card wow fadeInLeft" data-wow-delay="0.3s">
+                  <div class="card wow fadeInLeft ml-5" data-wow-delay="0.3s">
                     <div class="card-body">
                       <!--Header-->
                       <div class="text-center">
@@ -199,18 +195,18 @@
                         <hr>
                       </div>
                       <!--Body-->
-                      <form action="">
+                      <form action="index.php" method="POST">
                         <div class="row">
                           <div class="col-6">
                               <div class="md-form">
                                   <i class="fa fa-user-md prefix active"></i>
-                                  <input name="nom" type="text" id="nom" class="form-control" required>
+                                  <input name="nom" type="text" id="nom" class="form-control" value="<?php echo $signupResult['nom']; ?>" required>
                                   <label for="nom">Nom</label>
                               </div>
                           </div>
                           <div class="col-6">
                               <div class="md-form">
-                                  <input name="prenom" type="text" id="prenom" class="form-control" required>
+                                  <input name="prenom" type="text" id="prenom" class="form-control" value="<?php echo $signupResult['prenom']; ?>" required>
                                   <label for="prenom">Prénom</label>
                               </div>
                           </div>
@@ -219,12 +215,17 @@
                         
                         <div class="md-form mt-0">
                             <i class="fa fa-user-secret prefix active"></i>
-                            <input name="pseudo" type="text" id="pseudo" class="form-control" required>
+                            <input name="pseudo" type="text" id="pseudo" class="form-control" value="<?php echo $signupResult['pseudo']; ?>" required>
                             <label for="pseudo">Pseudo</label>
+                        </div>
+                        <div class="md-form mt-0">
+                            <i class="fa fa-envelope prefix active"></i>
+                            <input name="email" type="text" id="email" class="form-control" value="<?php echo $signupResult['email']; ?>" required>
+                            <label for="email">Email</label>
                         </div>
                         <div class="md-form">
                             <i class="fa fa-lock prefix active"></i>
-                            <input name="mpsignup" type="password" id="mpsignup" class="form-control" required>
+                            <input name="mpsignup" type="password" id="mpsignup" class="form-control" value="<?php echo $signupResult['pwd']; ?>" required>
                             <label for="mpsignup">Mot de passe</label>
                         </div>
                         <div class="md-form">
@@ -236,22 +237,22 @@
                           <div class="col-6 form-group">
                             <i class="fa fa-birthday-cake"></i>
                             <label for="date-naissance"> Date de naissance</label>
-                            <input style="width: 200px;" type="date" id="date-naissance" class="form-control">
+                            <input style="width: 200px;" type="date" name="date-naissance" value="<?php echo $signupResult['dateNaissance']; ?>" id="date-naissance" class="form-control">
                           </div>
-                          <div class="col-6 mt-3 form-inline">
+                          <div id="sexa" class="col-6 mt-3 form-inline">
                             <div class="form-check">
-                              <input class="form-check-input" type="radio" name="sexe" id="homme" checked>
+                              <input class="form-check-input" type="radio" name="sexe" value="m" id="homme" checked>
                               <label for="homme">Homme</label>
                             </div>
                             <div class="form-check">
-                              <input class="form-check-input" type="radio" name="sexe" id="femme">
+                              <input class="form-check-input" type="radio" name="sexe" value="f" id="femme">
                               <label for="femme">Femme</label>
                             </div>
                           </div>
                         </div>
                         <hr>
-
-                        <div class="text-center mt-4">
+                        <?php if(!empty($signupResult['error'])) {echo $signupResult['error'];} ?>
+                        <div class="text-center mt-0">
                           <button class="btn btn-blue">S'inscrire</button>
                         </div>
                       </form>
@@ -318,10 +319,6 @@
       }).blur(function() {
         $("#carousel-example-1z").carousel('cycle');
       });
-    });
-
-    $(document).ready(function() {
-      $('.mdb-select').material_select();
     });
 
   </script>
