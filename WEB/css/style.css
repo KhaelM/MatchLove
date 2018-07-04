@@ -1,0 +1,57 @@
+/* Public */
+.side-nav .search-form input[type=text] {
+    margin-top: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+body {
+    background-color: #eee;
+}
+/* --- Public */
+
+/* CSS PERSO MATCHMAKING */
+#matchmaking {
+    margin-bottom: 60px;
+}
+.pdp img {
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    margin-left: 25%;
+}
+
+.pseudo {
+    margin-left: 70px;
+}
+/*--- CSS PERSO MATCHMAKING ---*/
+
+
+/* CSS VOIR PROFIL */
+#voirprofil {
+    
+}
+
+@media (min-width: 768px) {
+    .carousel-multi-item-2 .col-md-3 {
+        float: left;
+        width: 25%;
+        max-width: 100%; 
+    } 
+}
+
+.carousel-multi-item-2 .card img {
+    border-radius: 2px; 
+}
+
+[data-slide=prev] {
+    position: relative;
+    top: -120px;
+    left: -25px;
+}
+
+[data-slide=next] {
+    position: relative;
+    top: -120px;
+    left: 96%;
+}

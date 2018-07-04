@@ -7,7 +7,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Bienvenue sur Match Love</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
@@ -275,6 +275,7 @@
       <!-- Initializations -->
   <script type="text/javascript">
     // Animations initialization
+    toastr.success("lelena");
     new WOW().init();
 
     $(function() {
@@ -285,9 +286,7 @@
       });
     });
 
-    $(document).ready(function() {
-      $('.mdb-select').material_select();
-    });
+    
 
   </script>
 </body>
